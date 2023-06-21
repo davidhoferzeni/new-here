@@ -25,9 +25,6 @@ class PopUpInfo extends HTMLElement {
     const text = this.getAttribute("data-text");
     this.#info.textContent = text;
 
-    const img = document.createElement("img");
-    icon.appendChild(img);
-
     // Create some CSS to apply to the shadow dom
     const style = document.createElement("style");
     console.log(style.isConnected);
@@ -35,7 +32,8 @@ class PopUpInfo extends HTMLElement {
     style.textContent = `
       .wrapper {
         position: relative;
-        background: blue;
+        display: block;
+        margin: 2rem;
       }
 
       .info {
@@ -47,15 +45,18 @@ class PopUpInfo extends HTMLElement {
         background: white;
         border-radius: 10px;
         opacity: 0;
-        transition: 0.6s all;
+        transition: 0.3s all;
         position: absolute;
         bottom: -20px;
         left: 10px;
         z-index: 3;
       }
 
-      img {
-        width: 1.2rem;
+      .icon {
+        background: blue;
+        display: block;
+        width: 2rem;
+        height: 2rem;
       }
 
       .icon:hover + .info, .icon:focus + .info {
@@ -71,6 +72,7 @@ class PopUpInfo extends HTMLElement {
     wrapper.appendChild(this.#info);
   }
 
+  /** @type {HTMLSpanElement} */
   #info;
 
   /**
