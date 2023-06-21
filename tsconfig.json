@@ -1,5 +1,5 @@
 {
-  "include": ["src/**/*"],
+  "include": ["src/**/*", "vite-env.d.ts"],
   "compilerOptions": {
     "lib": ["esnext", "DOM", "DOM.Iterable"],
     "module": "esnext",
