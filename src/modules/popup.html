@@ -1,14 +1,16 @@
 <button popovertarget="my-popover" class="trigger-btn">Open Popover</button>
 
-<div id="my-popover" popover="manual">
-  <button
-    class="close-btn"
-    popovertarget="my-popover"
-    popovertargetaction="hide"
-  >
-    <span aria-hidden="”true”">❌</span>
-    <span class="sr-only">Close</span>
-  </button>
-  <p>I am a popover with more information.</p>
-  <p></p>
+<div id="my-popover" popover="auto">
+  <div>
+    <button
+      class="close-btn"
+      popovertarget="my-popover"
+      popovertargetaction="hide"
+    >
+      <span aria-hidden="”true”">❌</span>
+      <span class="sr-only">Close</span>
+    </button>
+    <p>I am a popover with more information.</p>
+    <p></p>
+  </div>
 </div>

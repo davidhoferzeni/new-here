@@ -1,3 +1,22 @@
 button {
   background: pink;
 }
+
+#my-popover {
+  min-height: 100vh;
+  min-width: 100vw;
+  margin: 0 auto;
+  overflow: hidden;
+  transition: all 1s ease-out;
+}
+
+#my-popover:after {
+  content: "";
+  position: absolute;
+  left: 175px;
+  top: 25px;
+  border-radius: 100%;
+  width: 150px;
+  height: 150px;
+  box-shadow: 0px 0px 0px 2000px rgb(0 0 0 / 75%);
+}

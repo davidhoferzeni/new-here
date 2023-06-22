@@ -14,12 +14,24 @@ class PopUpInfo extends HTMLElement {
 
     // Create a shadow root
     const shadow = this.attachShadow({ mode: "open" });
-    const sayHi = html`${unsafeHTML(htmlTemplate)}`;
-    render(sayHi, shadow);
+    const renderedTemplate = html`${unsafeHTML(htmlTemplate)}`;
+    render(renderedTemplate, shadow);
+    shadow.children[0];
     const style = document.createElement("style");
     style.textContent = cssTemplate;
     shadow.appendChild(style);
   }
+
+  #updateStyle = () => {
+    const shadow = this.shadowRoot;
+    if (!shadow) {
+      return;
+    }
+    const styleTag = shadow.querySelector("style");
+    if (!styleTag) {
+      return;
+    }
+  };
 
   /**
    * @param {string} name
@@ -28,6 +40,9 @@ class PopUpInfo extends HTMLElement {
    */
   attributeChangedCallback(name, oldValue, newValue) {
     console.log(`Custom element attribute ${name} changed.`);
+    setTimeout(() => {
+      this.#updateStyle();
+    }, 500);
   }
 }
 
