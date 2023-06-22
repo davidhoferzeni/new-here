@@ -11,6 +11,14 @@
     <link rel="stylesheet" href="main.css" />
   </head>
   <body>
-    <popup-info data-text="Test directly in dom"></popup-info>
+    <div id="main-view" class="min-h-[100dvh] max-h-screen flex flex-col">
+      <h1 class="text-3xl font-bold underline">Hello world!</h1>
+      <div>
+        <popup-info data-text="Test directly in dom"></popup-info>
+        <div>Focus this element first</div>
+        <div>Then this</div>
+        <div>Finally this</div>
+      </div>
+    </div>
   </body>
 </html>
