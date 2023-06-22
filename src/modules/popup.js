@@ -27,7 +27,14 @@ class PopUpInfo extends HTMLElement {
         this.setNextElement();
       };
     }
-    this.#updateElement();
+
+    const popover = shadow.getElementById("my-popover");
+    if (popover) {
+      popover.addEventListener("beforetoggle", () => {
+        this.#resetElements();
+      });
+    }
+    //this.#updateElement();
   }
 
   /** @type {string[]} */
@@ -71,12 +78,21 @@ class PopUpInfo extends HTMLElement {
 
   setElementIds = (/** @type {string[]} */ elementIds) => {
     this.#elementIds = elementIds;
+    this.#resetElements();
+  };
+
+  #resetElements = () => {
     this.#currentElement = 0;
     this.setNextElement();
   };
 
   setNextElement = () => {
     if (this.#elementIds && this.#currentElement >= this.#elementIds.length) {
+      const popoverElement = this.shadowRoot?.getElementById("my-popover");
+      if (popoverElement) {
+        // @ts-ignore
+        popoverElement.hidePopover();
+      }
       return;
     }
     this.setAttribute("target-id", this.#elementIds[this.#currentElement]);
