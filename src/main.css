@@ -42,5 +42,11 @@ body {
     var(--background-start-rgb);
 }
 
-@layer components {
+.button {
+  @apply text-2xl text-center
+            shadow-sm appearance-none shadow-slate-200
+            border rounded
+            p-2
+            text-slate-800 leading-tight 
+            focus:outline-none;
 }

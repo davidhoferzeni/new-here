@@ -1,2 +1,7 @@
-import createPopup from "./modules/popup";
-createPopup(document.body, "Test via js.");
+import { createPopups } from "./modules/popup";
+
+function showPopover() {
+  createPopups("first", "second", "third");
+}
+
+showPopover();

@@ -5,7 +5,7 @@ import { unsafeHTML } from "lit-html/directives/unsafe-html.js";
 
 class PopUpInfo extends HTMLElement {
   static get observedAttributes() {
-    return ["data-text"];
+    return ["data-text", "pos-x", "pos-y", "width", "height", "target-id"];
   }
 
   constructor() {
@@ -16,21 +16,71 @@ class PopUpInfo extends HTMLElement {
     const shadow = this.attachShadow({ mode: "open" });
     const renderedTemplate = html`${unsafeHTML(htmlTemplate)}`;
     render(renderedTemplate, shadow);
-    shadow.children[0];
     const style = document.createElement("style");
     style.textContent = cssTemplate;
     shadow.appendChild(style);
+
+    const nextButton = shadow.querySelector(".next-btn");
+    if (nextButton) {
+      /** @type {HTMLButtonElement} */
+      (/** @type {unknown} */ (nextButton)).onclick = () => {
+        this.setNextElement();
+      };
+    }
+    this.#updateElement();
   }
 
-  #updateStyle = () => {
-    const shadow = this.shadowRoot;
-    if (!shadow) {
+  /** @type {string[]} */
+  #elementIds = [];
+  #currentElement = 0;
+
+  #updateElement = () => {
+    const styleElement = this.shadowRoot?.getElementById("my-popover");
+    if (!styleElement) {
       return;
     }
-    const styleTag = shadow.querySelector("style");
-    if (!styleTag) {
+    const targetId = this.getAttribute("target-id");
+    if (targetId) {
+      const target = document.getElementById(targetId);
+      if (target) {
+        const newPosition = calculateTarget(target);
+        styleElement.style.setProperty("--xPos", newPosition.x + "px");
+        styleElement.style.setProperty("--yPos", newPosition.y + "px");
+        styleElement.style.setProperty("--w", newPosition.w + "px");
+        styleElement.style.setProperty("--h", newPosition.h + "px");
+        return;
+      }
+    }
+    const posXAttribute = this.getAttribute("pos-x");
+    if (posXAttribute) {
+      styleElement.style.setProperty("--xPos", posXAttribute + "px");
+    }
+    const posYAttribute = this.getAttribute("pos-x");
+    if (posYAttribute) {
+      styleElement.style.setProperty("--yPos", posYAttribute + "px");
+    }
+    const widthAttribute = this.getAttribute("width");
+    if (widthAttribute) {
+      styleElement.style.setProperty("--w", widthAttribute + "px");
+    }
+    const heightAttribute = this.getAttribute("height");
+    if (heightAttribute) {
+      styleElement.style.setProperty("--h", heightAttribute + "px");
+    }
+  };
+
+  setElementIds = (/** @type {string[]} */ elementIds) => {
+    this.#elementIds = elementIds;
+    this.#currentElement = 0;
+    this.setNextElement();
+  };
+
+  setNextElement = () => {
+    if (this.#elementIds && this.#currentElement >= this.#elementIds.length) {
       return;
     }
+    this.setAttribute("target-id", this.#elementIds[this.#currentElement]);
+    this.#currentElement++;
   };
 
   /**
@@ -39,10 +89,7 @@ class PopUpInfo extends HTMLElement {
    * @param {any} newValue
    */
   attributeChangedCallback(name, oldValue, newValue) {
-    console.log(`Custom element attribute ${name} changed.`);
-    setTimeout(() => {
-      this.#updateStyle();
-    }, 500);
+    this.#updateElement();
   }
 }
 
@@ -50,11 +97,44 @@ class PopUpInfo extends HTMLElement {
 customElements.define("popup-info", PopUpInfo);
 
 /**
- * @param {HTMLElement} parentElement
- * @param {string} text
+ * @param {HTMLElement} target
+ * @returns
  */
-export default function createPopup(parentElement, text) {
+function calculateTarget(target) {
+  return {
+    x: target.offsetLeft,
+    y: target.offsetTop,
+    w: target.offsetWidth,
+    h: target.offsetHeight,
+  };
+}
+
+/**
+ * @param {string} text
+ * @param {HTMLElement} targetElement
+ * @param {HTMLElement} [parentElement]
+ */
+export function createPopup(text, targetElement, parentElement) {
   const popupInfo = document.createElement("popup-info");
   popupInfo.setAttribute("data-text", text);
+  const targetPos = calculateTarget(targetElement);
+  popupInfo.setAttribute("pos-x", targetPos.x.toString());
+  popupInfo.setAttribute("pos-y", targetPos.y.toString());
+  popupInfo.setAttribute("width", targetPos.w.toString());
+  popupInfo.setAttribute("height", targetPos.h.toString());
+  if (!parentElement) {
+    document.body.appendChild(popupInfo);
+    return;
+  }
   parentElement.appendChild(popupInfo);
+}
+
+/**
+ * @param {string[]} elementIds
+ */
+export function createPopups(...elementIds) {
+  const popupInfo = document.createElement("popup-info");
+  /** @type {PopUpInfo} */
+  (/** @type {unknown} */ (popupInfo)).setElementIds(elementIds);
+  document.body.appendChild(popupInfo);
 }

@@ -11,13 +11,14 @@
     <link rel="stylesheet" href="main.css" />
   </head>
   <body>
-    <div id="main-view" class="min-h-[100dvh] max-h-screen flex flex-col">
-      <h1 class="text-3xl font-bold underline">Hello world!</h1>
-      <div>
-        <popup-info data-text="Test directly in dom"></popup-info>
-        <div>Focus this element first</div>
-        <div>Then this</div>
-        <div>Finally this</div>
+    <div
+      id="main-view"
+      class="min-h-[100dvh] max-h-screen flex flex-col items-center justify-center"
+    >
+      <div class="flex flex-row gap-8">
+        <div id="first" class="border-2 p-2">Focus this element first</div>
+        <div id="second" class="border-2 p-2">Then this</div>
+        <div id="third" class="border-2 p-2">Finally this</div>
       </div>
     </div>
   </body>
